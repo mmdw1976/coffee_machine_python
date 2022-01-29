@@ -31,6 +31,7 @@ resources = {
     "coffee": 100,
 }
 
+
 def is_sufficient_recourses(drink):
     '''
     Loop over items in drink and compare it with recourses.
@@ -46,6 +47,7 @@ def is_sufficient_recourses(drink):
     # and none is higher than resource
     return True
 
+
 def process_coins():
     '''
     Ask the user how much quarters, dimes, nickles, pennies,
@@ -59,6 +61,7 @@ def process_coins():
     # now return total
     return total
 
+
 def is_transaction_successful(money_payed, drink_cost):
     if money_payed >= drink_cost:
         # round number
@@ -68,6 +71,7 @@ def is_transaction_successful(money_payed, drink_cost):
     else:
         print("Sorry that is not enough money. Money refunded")
 
+
 def make_coffee(choice, drink_ingredients):
     '''
     deduct the required ingredients from recources
@@ -75,6 +79,7 @@ def make_coffee(choice, drink_ingredients):
     for item in drink_ingredients:
         resources[item] -= drink_ingredients[item]
     print(f"Here is your {choice}")
+
 
 # set machine condition to True
 machine_on = True
