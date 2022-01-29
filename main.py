@@ -8,7 +8,7 @@ MENU = {
     },
     "latte": {
         "ingredients": {
-            "water": 400,
+            "water": 200,
             "milk": 150,
             "coffee": 24,
         },
@@ -59,6 +59,23 @@ def process_coins():
     # now return total
     return total
 
+def is_transaction_successful(money_payed, drink_cost):
+    if money_payed >= drink_cost:
+        # round number
+        change = round(money_payed - drink_cost, 2)
+        print(f"Here is ${change:.2f} in change")
+        return True
+    else:
+        print("Sorry that is not enough money. Money refunded")
+
+def make_coffee(choice, drink_ingredients):
+    '''
+    deduct the required ingredients from recources
+    '''
+    for item in drink_ingredients:
+        resources[item] -= drink_ingredients[item]
+    print(f"Here is your {choice}")
+
 # set machine condition to True
 machine_on = True
 
@@ -87,3 +104,8 @@ while machine_on:
         if is_sufficient_recourses(drink["ingredients"]):
             # handle coins and save it in variable
             payment = process_coins()
+            # check if transaction is successful only than we continue
+            # return True or False with check function
+            if is_transaction_successful(payment, drink["cost"]):
+                # if all is True make coffee and deduct recources
+                make_coffee(choice, drink["ingredients"])
