@@ -64,9 +64,12 @@ def process_coins():
 
 def is_transaction_successful(money_payed, drink_cost):
     if money_payed >= drink_cost:
+        # connect to global profit
+        global profit
         # round number
         change = round(money_payed - drink_cost, 2)
         print(f"Here is ${change:.2f} in change")
+        profit += drink_cost
         return True
     else:
         print("Sorry that is not enough money. Money refunded")
@@ -89,28 +92,33 @@ while machine_on:
     # choice user what product they want
     choice = input("What whould you like? (espresso/latte/cappuccino)")
 
-    # turn machine off when secret word "off" is used
-    if choice == 'off':
-        print("Machine is turning off!")
-        machine_on = False
-    # show report of available products when secret word "report" is used
-    elif choice == 'report':
-        print(f"Water: {resources['water']}ml")
-        print(f"Milk: {resources['milk']}ml")
-        print(f"Coffee: {resources['coffee']}g")
-        print(f"Money: ${profit}")
-    # In all other cases the user selected a product.
+    # create a message when people dont put in the right product
+    if choice in ['off', 'report', 'espresso', 'latte', 'cappuccino']:
+        # turn machine off when secret word "off" is used
+        if choice == 'off':
+            print("Machine is turning off!")
+            machine_on = False
+        # show report of available products when secret word "report" is used
+        elif choice == 'report':
+            print(f"Water: {resources['water']}ml")
+            print(f"Milk: {resources['milk']}ml")
+            print(f"Coffee: {resources['coffee']}g")
+            print(f"Money: ${profit:.2f}")
+        # In all other cases the user selected a product.
+        else:
+            # create anker point
+            drink = MENU[choice]
+            # check if there is sufficient recourses only than we can continue
+            # send selected drink to compare
+            # is_sufficient_recourses returns True or False
+            if is_sufficient_recourses(drink["ingredients"]):
+                # handle coins and save it in variable
+                payment = process_coins()
+                # check if transaction is successful only than we continue
+                # return True or False with check function
+                if is_transaction_successful(payment, drink["cost"]):
+                    # if all is True make coffee and deduct recources
+                    make_coffee(choice, drink["ingredients"])
+    # else give user message invalid input
     else:
-        # create anker point
-        drink = MENU[choice]
-        # check if there is sufficient recourses only than we can continue
-        # send selected drink to compare
-        # is_sufficient_recourses returns True or False
-        if is_sufficient_recourses(drink["ingredients"]):
-            # handle coins and save it in variable
-            payment = process_coins()
-            # check if transaction is successful only than we continue
-            # return True or False with check function
-            if is_transaction_successful(payment, drink["cost"]):
-                # if all is True make coffee and deduct recources
-                make_coffee(choice, drink["ingredients"])
+        print("Not a valid input!")
